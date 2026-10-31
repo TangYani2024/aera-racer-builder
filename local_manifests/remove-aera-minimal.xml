@@ -75,8 +75,6 @@
     <remove-project name="platform/external/freetype" />
     <remove-project name="platform/external/fsverity-utils" />
     <remove-project name="platform/external/gflags" />
-    <remove-project name="platform/external/go-cmp" />
-    <remove-project name="platform/external/golang-protobuf" />
     <remove-project name="platform/external/gptfdisk" />
     <remove-project name="platform/external/grpc-grpc" />
     <remove-project name="platform/external/grpc-grpc-java" />
@@ -187,7 +185,6 @@
     <remove-project name="platform/external/skia" />
     <remove-project name="platform/external/spdx-tools" />
     <remove-project name="platform/external/squashfs-tools" />
-    <remove-project name="platform/external/starlark-go" />
     <remove-project name="platform/external/stg" />
     <remove-project name="platform/external/strace" />
     <remove-project name="platform/external/tflite-support" />
