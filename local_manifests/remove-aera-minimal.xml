@@ -290,13 +290,7 @@
     <!-- sdk: 1 projects -->
     <remove-project name="platform/sdk" />
     <!-- system: kept for build tools (aidl, hidl, mkbootimg, sysprop, xsdc), apex, and core libraries (libbase, logging, etc.) -->
-    <!-- test: 16 projects -->
-    <remove-project name="platform/test/app_compat/csuite" />
-    <remove-project name="platform/test/dittosuite" />
-    <remove-project name="platform/test/robolectric-extensions" />
-    <remove-project name="platform/test/suite_harness" />
-    <remove-project name="platform/test/vts" />
-    <remove-project name="platform/test/vts-testcase/hal" />
+    <!-- test: kept for csuite_test and test suite harness soong plugins -->
     <!-- toolchain: 1 projects -->
     <!-- tools: 30 projects -->
     <remove-project name="platform/tools/apksig" />
