@@ -289,49 +289,7 @@
     <remove-project name="platform/prebuilts/tools" />
     <!-- sdk: 1 projects -->
     <remove-project name="platform/sdk" />
-    <!-- system: 51 projects -->
-    <remove-project name="platform/system/apex" />
-    <remove-project name="platform/system/authgraph" />
-    <remove-project name="platform/system/ca-certificates" />
-    <remove-project name="platform/system/chre" />
-    <remove-project name="platform/system/dmesgd" />
-    <remove-project name="platform/system/gatekeeper" />
-    <remove-project name="platform/system/gsid" />
-    <remove-project name="platform/system/hardware/interfaces" />
-    <remove-project name="platform/system/incremental_delivery" />
-    <remove-project name="platform/system/keymaster" />
-    <remove-project name="platform/system/keymint" />
-    <remove-project name="platform/system/libartpalette" />
-    <remove-project name="platform/system/libbase" />
-    <remove-project name="platform/system/libcppbor" />
-    <remove-project name="platform/system/libhwbinder" />
-    <remove-project name="platform/system/libprocinfo" />
-    <remove-project name="platform/system/librustutils" />
-    <remove-project name="platform/system/libufdt" />
-    <remove-project name="platform/system/libziparchive" />
-    <remove-project name="platform/system/logging" />
-    <remove-project name="platform/system/memory/libdmabufheap" />
-    <remove-project name="platform/system/memory/libion" />
-    <remove-project name="platform/system/memory/libmeminfo" />
-    <remove-project name="platform/system/memory/libmemtrack" />
-    <remove-project name="platform/system/memory/libmemunreachable" />
-    <remove-project name="platform/system/memory/lmkd" />
-    <remove-project name="platform/system/memory/mmd" />
-    <remove-project name="platform/system/netd" />
-    <remove-project name="platform/system/secretkeeper" />
-    <remove-project name="platform/system/secure_element" />
-    <remove-project name="platform/system/see/authmgr" />
-    <remove-project name="platform/system/server_configurable_flags" />
-    <remove-project name="platform/system/teeui" />
-    <remove-project name="platform/system/timezone" />
-    <remove-project name="platform/system/tools/aidl" />
-    <remove-project name="platform/system/tools/hidl" />
-    <remove-project name="platform/system/tools/mkbootimg" />
-    <remove-project name="platform/system/tools/sysprop" />
-    <remove-project name="platform/system/tools/xsdc" />
-    <remove-project name="platform/system/unwinding" />
-    <remove-project name="platform/system/usb_info_tools" />
-    <remove-project name="platform/system/zygote" />
+    <!-- system: kept for build tools (aidl, hidl, mkbootimg, sysprop, xsdc), apex, and core libraries (libbase, logging, etc.) -->
     <!-- test: 16 projects -->
     <remove-project name="platform/test/app_compat/csuite" />
     <remove-project name="platform/test/dittosuite" />
