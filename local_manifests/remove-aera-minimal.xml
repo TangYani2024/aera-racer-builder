@@ -341,7 +341,6 @@
     <remove-project name="platform/test/vts" />
     <remove-project name="platform/test/vts-testcase/hal" />
     <!-- toolchain: 1 projects -->
-    <remove-project name="toolchain/pgo-profiles" />
     <!-- tools: 30 projects -->
     <remove-project name="platform/tools/apksig" />
     <remove-project name="platform/tools/content_addressed_storage/prebuilts" />
