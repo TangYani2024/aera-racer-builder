@@ -113,7 +113,7 @@ jobs:
       - name: Repo sync (minimal, shallow, current branch only)
         run: |
           cd "$SYNC_DIR"
-          ~/bin/repo sync -c --force-sync --no-clone-bundle --no-tags --depth=1 -j"$(nproc)"
+          ~/bin/repo sync -c --force-sync --no-clone-bundle --no-tags -j"$(nproc)"
           echo "--- synced size ---"
           du -sh "$SYNC_DIR"
           df -h
