@@ -19,9 +19,7 @@
     <!-- build: 5 projects -->
     <remove-project name="platform/build/bazel" />
     <remove-project name="platform/build/bazel_common_rules" />
-    <remove-project name="platform/build/blueprint" />
     <remove-project name="platform/build/pesto" />
-    <remove-project name="platform/build/release" />
     <!-- dalvik: 1 projects -->
     <remove-project name="platform/dalvik" />
     <!-- developers: 2 projects -->
@@ -275,10 +273,8 @@
     <remove-project name="platform/prebuilts/bazel/darwin-x86_64" />
     <remove-project name="platform/prebuilts/bazel/linux-x86_64" />
     <remove-project name="platform/prebuilts/clang-tools" />
-    <remove-project name="platform/prebuilts/clang/host/linux-x86" />
     <remove-project name="platform/prebuilts/cmake/linux-x86" />
     <remove-project name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" />
-    <remove-project name="platform/prebuilts/go/linux-x86" />
     <remove-project name="platform/prebuilts/gradle-plugin" />
     <remove-project name="platform/prebuilts/jdk/jdk21" />
     <remove-project name="platform/prebuilts/jdk/jdk8" />
@@ -295,11 +291,6 @@
     <remove-project name="platform/prebuilts/module_sdk/Uwb" />
     <remove-project name="platform/prebuilts/rust" />
     <remove-project name="platform/prebuilts/tools" />
-    <remove-project name="platform/prebuilts/vndk/v30" />
-    <remove-project name="platform/prebuilts/vndk/v31" />
-    <remove-project name="platform/prebuilts/vndk/v32" />
-    <remove-project name="platform/prebuilts/vndk/v33" />
-    <remove-project name="platform/prebuilts/vndk/v34" />
     <!-- sdk: 1 projects -->
     <remove-project name="platform/sdk" />
     <!-- system: 51 projects -->
