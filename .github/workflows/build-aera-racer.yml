@@ -41,6 +41,9 @@ on:
         description: "Make target"
         required: true
         default: "recoveryimage"
+  push:
+    branches:
+      - 'register-only'
 
 env:
   MANIFEST_URL: https://github.com/AERA-Recovery/android_manifest.git
