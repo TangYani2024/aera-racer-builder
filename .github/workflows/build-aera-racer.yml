@@ -137,6 +137,16 @@ jobs:
           cd "$SYNC_DIR"
           source build/envsetup.sh
           lunch "twrp_${DEVICE_CODENAME}-bp2a-eng"
+          echo "=== Diagnostic checks ==="
+          echo "Checking prebuilts/sdk:"
+          ls -ld prebuilts/sdk || echo "prebuilts/sdk not found"
+          echo "Grepping PRODUCT_BUILD_FROM_TEXT_STUB:"
+          grep -rn "PRODUCT_BUILD_FROM_TEXT_STUB" build/make/target/product/ vendor/twrp/config/ device/motorola/racer/ device/motorola/sm7250-common/ 2>/dev/null || echo "None found"
+          echo "get_build_var PRODUCT_BUILD_FROM_TEXT_STUB:"
+          get_build_var PRODUCT_BUILD_FROM_TEXT_STUB 2>/dev/null || echo "N/A"
+          echo "Checking out/soong/soong.twrp_${DEVICE_CODENAME}.variables for Build_from_text_stub:"
+          grep -i "Build_from_text_stub" "out/soong/soong.twrp_${DEVICE_CODENAME}.variables" 2>/dev/null || echo "soong variables file does not exist yet or variable not set"
+          echo "=== End diagnostic checks ==="
           mka adbd "${{ inputs.build_target }}" -j"$(nproc)"
 
       - name: Show result
