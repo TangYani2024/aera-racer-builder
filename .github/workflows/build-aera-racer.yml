@@ -137,10 +137,10 @@ jobs:
           cd "$SYNC_DIR"
           echo "=== Patching frameworks/base/api/Android.bp ==="
           echo "Before patch:"
-          grep -n -C 2 '"framework-connectivity"' frameworks/base/api/Android.bp || true
-          sed -i '/"framework-connectivity",/d' frameworks/base/api/Android.bp
+          grep -n -C 2 '"framework-connectivity' frameworks/base/api/Android.bp || true
+          sed -i '/"framework-connectivity.*",/d' frameworks/base/api/Android.bp
           echo "After patch:"
-          grep -n -C 2 '"framework-connectivity"' frameworks/base/api/Android.bp || true
+          grep -n -C 2 '"framework-connectivity' frameworks/base/api/Android.bp || true
           echo "=== Patch applied ==="
 
       - name: Build recoveryimage
