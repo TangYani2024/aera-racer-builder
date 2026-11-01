@@ -85,7 +85,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git curl python3 openjdk-17-jdk \
+          sudo apt-get install -y git curl python3 openjdk-17-jdk ccache \
             build-essential bc bison flex libssl-dev libncurses-dev \
             unzip zip zlib1g-dev libxml2-utils xsltproc fontconfig \
             libgl1-mesa-dev libx11-dev lib32z1-dev libc6-dev-i386 \
@@ -142,11 +142,27 @@ jobs:
             "${{ inputs.common_tree_url }}" device/motorola/sm7250-common
           ls device/motorola/sm7250-common
 
+      - name: Restore ccache
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/ccache
+          key: ccache-racer-aera16-${{ github.run_id }}
+          restore-keys: |
+            ccache-racer-aera16-
+
       - name: Build recoveryimage
         run: |
           cd "$SYNC_DIR"
-          mkdir -p tools/tradefederation/core
+          mkdir -p tools/tradefederation/core /tmp/ccache
           export GOGC=50
+          export USE_CCACHE=1
+          export CC_WRAPPER=/usr/bin/ccache
+          export CCACHE_DIR=/tmp/ccache
+          export CCACHE_SLOPPINESS=time_macros,include_file_mtime,file_macro
+          ccache -o compression=true
+          ccache -o max_size=4.0G
+          ccache -z
+          ccache -s
           source build/envsetup.sh
           lunch "twrp_${DEVICE_CODENAME}-bp2a-eng"
           echo "=== Diagnostic checks ==="
@@ -157,10 +173,34 @@ jobs:
           echo "=== End diagnostic checks ==="
           sudo renice -n 10 -p $$ || true
           sudo ionice -c 2 -n 7 -p $$ || true
-          (while true; do sleep 300; echo "=== [Monitor $(date -u +%H:%M:%S)] Disk: $(df -h / | awk 'NR==2{print $3"/"$2" (avail "$4")"}') | $(free -h | awk '/^Mem:/{printf "Mem: %s/%s ", $3, $2} /^Swap:/{printf "Swap: %s/%s\n", $3, $2}') ==="; done) &
+          (
+            SCANNED=0
+            while true; do
+              sleep 60
+              if [ "$SCANNED" -eq 0 ] && [ -f out/combined-twrp_racer.ninja ]; then
+                SCANNED=1
+                echo "=== [DAG Check] Scanning Ninja subgraph for missing dependencies ==="
+                prebuilts/build-tools/linux-x86/bin/ninja -f out/combined-twrp_racer.ninja -t commands adbd "${{ inputs.build_target }}" | grep "missing dependencies:" || echo "=== [DAG Check] 0 missing dependencies in Ninja subgraph! ==="
+              fi
+              echo "=== [Monitor $(date -u +%H:%M:%S)] Disk: $(df -h / | awk 'NR==2{print $3"/"$2" (avail "$4")"}') | $(free -h | awk '/^Mem:/{printf "Mem: %s/%s ", $3, $2} /^Swap:/{printf "Swap: %s/%s\n", $3, $2}') ==="
+            done
+          ) &
           MONITOR_PID=$!
           mka adbd "${{ inputs.build_target }}" -j"$(nproc)"
           kill $MONITOR_PID 2>/dev/null || true
+
+      - name: Show ccache stats
+        if: always()
+        run: |
+          export CCACHE_DIR=/tmp/ccache
+          ccache -s || true
+
+      - name: Save ccache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/ccache
+          key: ccache-racer-aera16-${{ github.run_id }}
 
       - name: Show result
         run: |

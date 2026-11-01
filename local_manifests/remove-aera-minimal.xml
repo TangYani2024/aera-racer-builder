@@ -26,13 +26,8 @@
     <remove-project name="platform/external/bazelbuild-rules_python" />
     <remove-project name="platform/external/bazelbuild-rules_rust" />
     <remove-project name="platform/external/bazelbuild-rules_testing" />
-    <remove-project name="platform/external/clang" />
     <remove-project name="platform/external/cronet" />
-    <remove-project name="platform/external/dng_sdk" />
-    <remove-project name="platform/external/llvm" />
-    <remove-project name="platform/external/noto-fonts" />
     <remove-project name="platform/external/openwrt-prebuilts" />
-    <remove-project name="platform/external/roboto-fonts" />
     <remove-project name="platform/external/tflite-support" />
     <!-- kernel: racer uses its own prebuilt 4.19 kernel in device tree -->
     <remove-project name="kernel/prebuilts/6.1/arm64" />
@@ -71,7 +66,6 @@
     <remove-project name="platform/prebuilts/bazel/darwin-x86_64" />
     <remove-project name="platform/prebuilts/bazel/linux-x86_64" />
     <remove-project name="platform/prebuilts/gradle-plugin" />
-    <remove-project name="platform/prebuilts/jdk/jdk8" />
     <remove-project name="platform/prebuilts/module_sdk/AdServices" />
     <remove-project name="platform/prebuilts/module_sdk/AppSearch" />
     <remove-project name="platform/prebuilts/module_sdk/Bluetooth" />
