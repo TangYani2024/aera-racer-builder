@@ -83,6 +83,4 @@
     <remove-project name="platform/tools/test/mobly_snippets" />
     <remove-project name="platform/tools/tradefederation/contrib" />
     <remove-project name="platform/tools/tradefederation" />
-    <!-- restore hardware/qcom/wlan (removed by upstream remove-minimal.xml) so lib_driver_cmd_qcwcn builds for wpa_supplicant -->
-    <project path="hardware/qcom/wlan" name="platform/hardware/qcom/wlan" groups="qcom_wlan,pdk-qcom" remote="aosp" />
 </manifest>
