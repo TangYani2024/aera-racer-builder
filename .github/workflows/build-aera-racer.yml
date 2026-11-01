@@ -71,11 +71,11 @@ jobs:
           docker-images: true
           swap-storage: false
 
-      - name: Configure 16 GB swap and show free space
+      - name: Configure 24 GB swap and show free space
         run: |
           sudo swapoff -a || true
           sudo rm -f /swapfile /mnt/swapfile
-          sudo fallocate -l 16G /swapfile
+          sudo fallocate -l 24G /swapfile
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile
@@ -145,6 +145,8 @@ jobs:
       - name: Build recoveryimage
         run: |
           cd "$SYNC_DIR"
+          mkdir -p tools/tradefederation/core
+          export GOGC=50
           source build/envsetup.sh
           lunch "twrp_${DEVICE_CODENAME}-bp2a-eng"
           echo "=== Diagnostic checks ==="
