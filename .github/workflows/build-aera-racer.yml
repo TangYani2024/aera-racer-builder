@@ -151,7 +151,12 @@ jobs:
           echo "Checking prebuilts/sdk:"
           ls -ld prebuilts/sdk || echo "prebuilts/sdk not found"
           echo "=== End diagnostic checks ==="
-          nice -n 10 ionice -c 2 -n 7 mka adbd "${{ inputs.build_target }}" -j"$(nproc)"
+          sudo renice -n 10 -p $$ || true
+          sudo ionice -c 2 -n 7 -p $$ || true
+          (while true; do sleep 300; echo "=== [Monitor $(date -u +%H:%M:%S)] Disk: $(df -h / | awk 'NR==2{print $3"/"$2" (avail "$4")"}') | $(free -h | awk '/^Mem:/{printf "Mem: %s/%s ", $3, $2} /^Swap:/{printf "Swap: %s/%s\n", $3, $2}') ==="; done) &
+          MONITOR_PID=$!
+          mka adbd "${{ inputs.build_target }}" -j"$(nproc)"
+          kill $MONITOR_PID 2>/dev/null || true
 
       - name: Show result
         run: |
