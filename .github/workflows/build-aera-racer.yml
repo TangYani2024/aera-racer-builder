@@ -132,6 +132,17 @@ jobs:
             "${{ inputs.common_tree_url }}" device/motorola/sm7250-common
           ls device/motorola/sm7250-common
 
+      - name: Patch frameworks/base/api/Android.bp (workaround dependency cycle)
+        run: |
+          cd "$SYNC_DIR"
+          echo "=== Patching frameworks/base/api/Android.bp ==="
+          echo "Before patch:"
+          grep -n -C 2 '"framework-connectivity"' frameworks/base/api/Android.bp || true
+          sed -i '/"framework-connectivity",/d' frameworks/base/api/Android.bp
+          echo "After patch:"
+          grep -n -C 2 '"framework-connectivity"' frameworks/base/api/Android.bp || true
+          echo "=== Patch applied ==="
+
       - name: Build recoveryimage
         run: |
           cd "$SYNC_DIR"
