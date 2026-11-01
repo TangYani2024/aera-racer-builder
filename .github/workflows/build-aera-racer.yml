@@ -69,10 +69,18 @@ jobs:
           haskell: true
           large-packages: true
           docker-images: true
-          swap-storage: true
+          swap-storage: false
 
-      - name: Show free space
-        run: df -h
+      - name: Configure 16 GB swap and show free space
+        run: |
+          sudo swapoff -a || true
+          sudo rm -f /swapfile /mnt/swapfile
+          sudo fallocate -l 16G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+          df -h
 
       - name: Install build dependencies
         run: |
@@ -143,7 +151,7 @@ jobs:
           echo "Checking prebuilts/sdk:"
           ls -ld prebuilts/sdk || echo "prebuilts/sdk not found"
           echo "=== End diagnostic checks ==="
-          mka adbd "${{ inputs.build_target }}" -j"$(nproc)"
+          nice -n 10 ionice -c 2 -n 7 mka adbd "${{ inputs.build_target }}" -j"$(nproc)"
 
       - name: Show result
         run: |
