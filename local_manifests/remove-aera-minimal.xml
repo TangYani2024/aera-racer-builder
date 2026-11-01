@@ -33,13 +33,6 @@
     <remove-project name="platform/external/noto-fonts" />
     <remove-project name="platform/external/openwrt-prebuilts" />
     <remove-project name="platform/external/roboto-fonts" />
-    <remove-project name="platform/external/rust/android-crates-io" />
-    <remove-project name="platform/external/rust/autocxx" />
-    <remove-project name="platform/external/rust/beto-rust" />
-    <remove-project name="platform/external/rust/crates/openssl" />
-    <remove-project name="platform/external/rust/cros-libva" />
-    <remove-project name="platform/external/rust/cxx" />
-    <remove-project name="platform/external/rust/pica" />
     <remove-project name="platform/external/tflite-support" />
     <!-- kernel: racer uses its own prebuilt 4.19 kernel in device tree -->
     <remove-project name="kernel/prebuilts/6.1/arm64" />
@@ -47,11 +40,10 @@
     <remove-project name="kernel/prebuilts/6.6/arm64" />
     <remove-project name="kernel/prebuilts/common-modules/trusty/6.12/arm64" />
     <remove-project name="kernel/prebuilts/common-modules/trusty/6.6/arm64" />
-    <!-- packages: keep common, DnsResolver, Gki, RuntimeI18n; remove unused mainline apps/modules -->
+    <!-- packages: keep common, ConfigInfrastructure, DnsResolver, Gki, RemoteKeyProvisioning, RuntimeI18n, SdkExtensions, StatsD; remove unused mainline apps/modules -->
     <remove-project name="platform/packages/modules/AdServices" />
     <remove-project name="platform/packages/modules/AppSearch" />
     <remove-project name="platform/packages/modules/Bluetooth" />
-    <remove-project name="platform/packages/modules/ConfigInfrastructure" />
     <remove-project name="platform/packages/modules/CrashRecovery" />
     <remove-project name="platform/packages/modules/DeviceLock" />
     <remove-project name="platform/packages/modules/HealthFitness" />
@@ -62,9 +54,7 @@
     <remove-project name="platform/packages/modules/OnDevicePersonalization" />
     <remove-project name="platform/packages/modules/Permission" />
     <remove-project name="platform/packages/modules/Profiling" />
-    <remove-project name="platform/packages/modules/RemoteKeyProvisioning" />
     <remove-project name="platform/packages/modules/Scheduling" />
-    <remove-project name="platform/packages/modules/StatsD" />
     <remove-project name="platform/packages/modules/Telephony" />
     <remove-project name="platform/packages/modules/UprobeStats" />
     <remove-project name="platform/packages/modules/Uwb" />
@@ -73,7 +63,7 @@
     <remove-project name="platform/packages/providers/MediaProvider" />
     <remove-project name="platform/packages/screensavers/Basic" />
     <remove-project name="platform/packages/screensavers/PhotoTable" />
-    <!-- prebuilts: keep host gcc sysroot, clang-tools, cmake, tools; remove unused large prebuilts -->
+    <!-- prebuilts: keep host gcc sysroot, clang-tools, cmake, rust, tools; remove unused large prebuilts -->
     <remove-project name="platform/prebuilts/abi-dumps/ndk" />
     <remove-project name="platform/prebuilts/abi-dumps/platform" />
     <remove-project name="platform/prebuilts/abi-dumps/vndk" />
@@ -86,15 +76,12 @@
     <remove-project name="platform/prebuilts/module_sdk/AdServices" />
     <remove-project name="platform/prebuilts/module_sdk/AppSearch" />
     <remove-project name="platform/prebuilts/module_sdk/Bluetooth" />
-    <remove-project name="platform/prebuilts/module_sdk/ConfigInfrastructure" />
     <remove-project name="platform/prebuilts/module_sdk/CrashRecovery" />
     <remove-project name="platform/prebuilts/module_sdk/DeviceLock" />
     <remove-project name="platform/prebuilts/module_sdk/HealthFitness" />
     <remove-project name="platform/prebuilts/module_sdk/OnDevicePersonalization" />
     <remove-project name="platform/prebuilts/module_sdk/Profiling" />
-    <remove-project name="platform/prebuilts/module_sdk/RemoteKeyProvisioning" />
     <remove-project name="platform/prebuilts/module_sdk/Uwb" />
-    <remove-project name="platform/prebuilts/rust" />
     <!-- tools: remove large test/infra prebuilts -->
     <remove-project name="platform/tools/content_addressed_storage/prebuilts" />
     <remove-project name="platform/tools/deviceinfra/prebuilts" />

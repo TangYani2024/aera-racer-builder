@@ -122,6 +122,8 @@ jobs:
         run: |
           cd "$SYNC_DIR"
           ~/bin/repo sync -c --force-sync --no-clone-bundle --no-tags -j"$(nproc)"
+          echo "--- freeing redundant prebuilts git packfiles in .repo ---"
+          rm -rf "$SYNC_DIR/.repo/project-objects/platform/prebuilts" "$SYNC_DIR/.repo/projects/prebuilts"
           echo "--- synced size ---"
           du -sh "$SYNC_DIR"
           df -h
