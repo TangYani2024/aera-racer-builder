@@ -63,7 +63,7 @@
     <remove-project name="platform/packages/providers/MediaProvider" />
     <remove-project name="platform/packages/screensavers/Basic" />
     <remove-project name="platform/packages/screensavers/PhotoTable" />
-    <!-- prebuilts: keep host gcc sysroot, clang-tools, cmake, rust, tools; remove unused large prebuilts -->
+    <!-- prebuilts: keep host gcc sysroot, clang-tools, cmake, jdk21, rust, tools; remove unused large prebuilts -->
     <remove-project name="platform/prebuilts/abi-dumps/ndk" />
     <remove-project name="platform/prebuilts/abi-dumps/platform" />
     <remove-project name="platform/prebuilts/abi-dumps/vndk" />
@@ -71,7 +71,6 @@
     <remove-project name="platform/prebuilts/bazel/darwin-x86_64" />
     <remove-project name="platform/prebuilts/bazel/linux-x86_64" />
     <remove-project name="platform/prebuilts/gradle-plugin" />
-    <remove-project name="platform/prebuilts/jdk/jdk21" />
     <remove-project name="platform/prebuilts/jdk/jdk8" />
     <remove-project name="platform/prebuilts/module_sdk/AdServices" />
     <remove-project name="platform/prebuilts/module_sdk/AppSearch" />
