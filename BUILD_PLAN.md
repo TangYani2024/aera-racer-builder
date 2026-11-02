@@ -69,3 +69,25 @@ racer-build/
 - 解密是最大未知数：LOS 23.2 的 /data 是 FBE 加密，AERA 继承 TWRP 的解密栈，garnet 上能用不等于 racer 上能用，要实测。
 - racer 的 sm7250 + 4.19 内核 + 安卓 11 年代 vendor，是 AERA 支持列表里最老的一档；它的新功能（recovery 里跑流量要用的 qrtr/rmtfs 用户态）和老内核接口对不上的风险存在。
 - 免费 runner 单次任务上限 6 小时，工作流已设 `timeout-minutes: 360`。
+
+## 7. Manifest Validation
+
+Before modifying `local_manifests/remove-aera-minimal.xml`, ensure its correctness by using the provided validation script.
+
+Run the script from the repository root:
+
+```bash
+python3 tools/check_manifest.py local_manifests/remove-aera-minimal.xml
+```
+
+The script performs the following checks:
+1. **XML is well-formed:** Fails if the file cannot be parsed as valid XML.
+2. **No duplicate entries:** Fails if the same `remove-project` name is listed more than once. (Historically, a project was mistakenly removed multiple times, causing sync issues.)
+3. **Valid AOSP prefix:** Fails if a project name does not start with a recognized AOSP prefix (e.g., `platform/`, `kernel/`, `hardware/`, etc.).
+4. **Alphabetical ordering:** Emits a warning if the entries are not sorted alphabetically.
+
+A successful validation exits with status `0`. Any errors will produce a non-zero exit status and print an explanation to stderr. You can test the script's behavior using the included fixture:
+
+```bash
+python3 tools/check_manifest.py tools/fixtures/duplicate.xml
+```
