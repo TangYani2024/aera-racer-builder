@@ -142,6 +142,14 @@ jobs:
             "${{ inputs.common_tree_url }}" device/motorola/sm7250-common
           ls device/motorola/sm7250-common
 
+      - name: Prune unused wcn6740 WLAN variant (racer uses legacy/qcwcn)
+        run: |
+          # hardware/qcom/wlan ships both legacy/qcwcn and wcn6740/qcwcn, and both
+          # define lib_driver_cmd_qcwcn; kati rejects the duplicate definition.
+          # racer (sm7250) sets BOARD_WLAN_DEVICE := qcwcn and its kernel module is
+          # qca_cld3_wlan.ko, i.e. the legacy variant. wcn6740 targets the WCN6740
+          # chip (sm8475 era) which racer does not have, so drop that variant.
+          rm -rf "$SYNC_DIR/hardware/qcom/wlan/wcn6740"
       - name: Restore ccache
         uses: actions/cache/restore@v4
         with:
