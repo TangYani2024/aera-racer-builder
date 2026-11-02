@@ -7,7 +7,7 @@
 | 路线 | 同步量 | 磁盘 | 首次构建 | 本地成本 |
 |---|---|---|---|---|
 | 官方流程（全量 manifest） | 989 个项目，全历史 | 200 GB+ | 数小时 | 一台 Linux 大盘机器 |
-| 最小同步（本方案） | 64 个项目，`--depth=1` | 预估 15–25 GB | 1–2 小时 | 0（跑在 GitHub 免费 runner 上） |
+| 最小同步（本方案） | 69 个项目的净删除清单，`--depth=1` | 预估 15–25 GB | 1–2 小时 | 0（跑在 GitHub 免费 runner 上） |
 | 增量构建（改设备树后） | — | 复用 out/ | 几分钟 | 0 |
 
 "官方流程贵"的原因不是产物大（recovery.img 只有几十 MB），而是 Android 构建系统要整树解析依赖：recovery 链接的平台库全散在源码里，`repo sync` 默认又全量拉。AERA 的 `remove-minimal.xml` 只删了模拟器和 x86 边角料，省不了多少，所以才需要自己再砍一层。
@@ -18,27 +18,29 @@
 racer-build/
 ├── BUILD_PLAN.md                        # 本文件
 ├── local_manifests/
-│   └── remove-aera-minimal.xml         # v1.1：从 default.xml 的 989 个项目里删掉 925 个，只留 64 个
+│   └── remove-aera-minimal.xml         # 经过多轮恢复后的精简清单，当前包含 69 个 <remove-project> 条目
 └── .github/workflows/
     └── build-aera-racer.yml            # GitHub Actions 构建流程
 ```
 
 ### 最小同步清单是怎么来的
 
-直接对 AERA `default.xml` 做了减法：保留构建系统（build/make、build/soong、bionic）、recovery 及其 AERA 变体（bootable/recovery、system/core、adb、Connectivity、LVGL、vendor/recovery、vendor/twrp、device/qcom/twrp-common——解密用的 qcom_decrypt 就在里面）、它们的链接期依赖（frameworks/base、frameworks/native、hardware/interfaces、system/* 的一小部分、external/* 里约 50 个库、prebuilts 工具链），其余全部删掉。
+这份清单是经过多轮迭代恢复后的一个小规模净删除清单。最初尝试保留极少数项目，但随着构建的进行，许多依赖被逐步加回。目前的 `remove-aera-minimal.xml` 仅包含 69 个经过验证可以安全移除的项目。
 
 两个有意的保守决定：
 
 - **留了 `frameworks/base`**：基础产品配置文件会引用它，删掉是最可能让第一次构建直接炸在 lunch 阶段的原因。等构建跑通之后可以再试着砍。
 - **留了 `prebuilts/vndk` 和 `prebuilts/sdk`**：recovery 链接的部分 VNDK 库和 Soong 宿主工具需要它们。
 
-### 诚实说明：v1.1 未验证
+### Iteration log
 
-这份清单没有跑通过。预期打法就是**用 CI 当验证器**：第一次跑大概率在某个缺失的项目上失败，日志会明确报出缺了谁 → 从 remove 清单里删掉那一行 → 重跑。1–3 轮是正常的。最可能要加回的候选：
+在将 CI 作为验证器的循环中，我们遇到了并解决了以下问题：
 
-- `system/netd`、 `external/dhcpcd`（如果 AERA 的联网功能需要它们）
-- `art` / `libcore` / `libnativehelper`（如果某个基础产品配置引用了它们）
-- `prebuilts/ndk`、更多的 `external/*` 小库
+- **反复恢复项目**：多次因为依赖缺失而将项目从 `remove` 清单中移除并加回。
+- **`frameworks/base` `Android.bp` 存根循环补丁**：处理了由存根引起的依赖循环问题。
+- **Runner 内存溢出 (OOM) 修复**：为防止构建过程中因为内存不足而失败，添加了 24 GB 的 swap 空间，并使用 `nice`/`ionice` 降低优先级，以及设置 `GOGC=50` 来优化垃圾回收策略。
+- **`tools/tradefederation/core` 存根目录**：通过创建存根目录解决了缺失 `tools/tradefederation/core` 的问题。
+- **当前的挑战前沿**：正在解决针对 `lib_driver_cmd_qcwcn` (`hardware/qcom/wlan`) 的 Soong 命名空间解析问题。
 
 ## 3. 使用步骤
 
@@ -55,7 +57,7 @@ racer-build/
 - `device/motorola/racer/`：产品定义、BoardConfig、fstab、预编译内核/DTB/DTBO（已从用户自己的 14-13 备份里提取并验证）、亮度值（来自内核面板 DTS，max 2047）、触摸模块清单（来自 LOS 树）
 - `device/motorola/sm7250-common/`：平台共用部分（分区尺寸、内核参数、A/B 配置、recovery 初始化脚本）
 
-还缺两块要真机才能补（树里的 `TODO.md` 有 exact 命令）：**① vendor 内核模块**（`extract-modules.sh` 一键从 LOS 手机里拉）和 **② 解密用的 QCOM 安全二进制**（qseecomd、keymint 等，从 LOS vendor 里提）。这两块补完之后，把两棵树各推到一个 GitHub 仓库，再跑上面的工作流。
+设备树所需的两块关键组件已经完成：**① vendor 内核模块** 已被放置在 racer 树的 `prebuilt/` 目录下（详情请参考其 README），**② 解密用的 QCOM 安全二进制** 已被放置在 sm7250-common 树的 `twrp/recovery/root/` 目录下（详情请参考其 README）。把两棵树各推到一个 GitHub 仓库，再跑上面的工作流。
 
 ## 5. 磁盘数学（为什么云构建能成立）
 
