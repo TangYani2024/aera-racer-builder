@@ -142,14 +142,20 @@ jobs:
             "${{ inputs.common_tree_url }}" device/motorola/sm7250-common
           ls device/motorola/sm7250-common
 
-      - name: Prune unused wcn6740 WLAN variant (racer uses legacy/qcwcn)
+      - name: Prune legacy Make definition of lib_driver_cmd_qcwcn (keep the Soong one)
         run: |
-          # hardware/qcom/wlan ships both legacy/qcwcn and wcn6740/qcwcn, and both
-          # define lib_driver_cmd_qcwcn; kati rejects the duplicate definition.
-          # racer (sm7250) sets BOARD_WLAN_DEVICE := qcwcn and its kernel module is
-          # qca_cld3_wlan.ko, i.e. the legacy variant. wcn6740 targets the WCN6740
-          # chip (sm8475 era) which racer does not have, so drop that variant.
-          rm -rf "$SYNC_DIR/hardware/qcom/wlan/wcn6740"
+          # lib_driver_cmd_qcwcn is defined twice in hardware/qcom/wlan:
+          # wcn6740/qcwcn/wpa_supplicant_8_lib/Android.bp (Soong, unconditional)
+          # and legacy/qcwcn/wpa_supplicant_8_lib/Android.mk (Make). Soong runs
+          # first and registers its module name into kati's module table via
+          # out/soong/Android-<product>.mk, so the legacy Make definition then
+          # collides ("already defined by .../wcn6740/..."). The consumers
+          # (wpa_supplicant/hostapd) are Soong modules and can only resolve the
+          # Soong definition, so pruning wcn6740 starved Soong instead
+          # ("module wpa_supplicant missing dependencies: lib_driver_cmd_qcwcn").
+          # Fix: keep the Soong definition; drop only this one legacy Make file.
+          # legacy itself must stay: it is the wifi HAL conditions_default source.
+          rm -f "$SYNC_DIR/hardware/qcom/wlan/legacy/qcwcn/wpa_supplicant_8_lib/Android.mk"
       - name: Restore ccache
         uses: actions/cache/restore@v4
         with:
